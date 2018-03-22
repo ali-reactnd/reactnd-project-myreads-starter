@@ -35,7 +35,7 @@ class BooksApp extends React.Component {
             {this.state.showSearchPage ? (
                 <SearchUI flipSearchBoolean={this.flipShowSearchPageBoolean} />
             ) : (
-                <MainUI flipSearchBoolean={this.flipShowSearchPageBoolean} />
+                <MainUI books={this.state.books} flipSearchBoolean={this.flipShowSearchPageBoolean} />
             )}
             </div>
         )

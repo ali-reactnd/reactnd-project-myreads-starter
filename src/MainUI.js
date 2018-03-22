@@ -11,9 +11,9 @@ export const MainUI = (props) => {
             </div>
             <div className="list-books-content">
                 <div>
-                    <Shelf />
-                    <Shelf />
-                    <Shelf />
+                    <Shelf books={props.books} />
+                    <Shelf books={props.books} />
+                    <Shelf books={props.books} />
                 </div>
             </div>
             <div className="open-search">

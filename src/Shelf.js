@@ -8,12 +8,13 @@ export const Shelf = (props) => (
     <h2 className="bookshelf-title">Currently Reading</h2>
     <div className="bookshelf-books">
         <ol className="books-grid">
-            <li>
-            <BookUI />
-            </li>
-            <li>
-            <BookUI />
-            </li>
+            {
+                props.books.map(
+                    book => {
+                        <li>book</li>
+                    }
+                )
+            }
         </ol>
     </div>
 </div>
