@@ -10,9 +10,7 @@ export const Shelf = (props) => (
         <ol className="books-grid">
             {
                 props.books.map(
-                    book => {
-                        <li>book</li>
-                    }
+                    book => <li key={book.id}> <BookUI book={book} /> </li>
                 )
             }
         </ol>
