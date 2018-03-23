@@ -14,7 +14,12 @@ class BooksApp extends React.Component {
          * pages, as well as provide a good URL they can bookmark and share.
          */
         showSearchPage: false,
-        books: []
+        books: [],
+        shelves: {
+            "currentlyReading": "Currently Reading",
+            "wantToRead": "Want To Read",
+            "read": "Read"
+        }
     }
 
     componentDidMount() {
@@ -35,7 +40,7 @@ class BooksApp extends React.Component {
             {this.state.showSearchPage ? (
                 <SearchUI flipSearchBoolean={this.flipShowSearchPageBoolean} />
             ) : (
-                <MainUI books={this.state.books} flipSearchBoolean={this.flipShowSearchPageBoolean} />
+                <MainUI shelves={this.state.shelves} books={this.state.books} flipSearchBoolean={this.flipShowSearchPageBoolean} />
             )}
             </div>
         )

@@ -11,9 +11,11 @@ export const MainUI = (props) => {
             </div>
             <div className="list-books-content">
                 <div>
-                    <Shelf books={props.books} />
-                    <Shelf books={props.books} />
-                    <Shelf books={props.books} />
+                    {
+                        Object.keys(props.shelves).map(
+                            (shelfKey, index) => <Shelf key={index} shelfKey={shelfKey} shelfTitle={props.shelves[shelfKey]} books={props.books} />
+                        )
+                    }
                 </div>
             </div>
             <div className="open-search">
