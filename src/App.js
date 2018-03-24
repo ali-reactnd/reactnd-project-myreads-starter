@@ -1,7 +1,7 @@
 import React from 'react'
 import * as BooksAPI from './BooksAPI'
 import './App.css'
-import {SearchUI} from "./SearchUI";
+import SearchUI from "./SearchUI";
 import {MainUI} from "./MainUI";
 
 
