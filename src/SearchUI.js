@@ -1,8 +1,13 @@
 import React, {Component} from 'react'
 // import * as BooksAPI from './BooksAPI'
 import './App.css'
+import {BookUI} from "./BookUI";
 
 class SearchUI extends Component {
+
+    state ={
+        books: []
+    }
 
     render() {
         return (
@@ -22,12 +27,21 @@ class SearchUI extends Component {
 
                     </div>
                 </div>
-                <div className="search-books-results">
-                    <ol className="books-grid"></ol>
-                </div>
+                {this.Shelf()}
             </div>
         );
     }
+
+    Shelf = () => (
+        <div className="search-books-results">
+            <ol className="books-grid">
+                {
+                    this.state.books.map( book => <li key={book.id}> <BookUI book={book} /> </li> )
+                }
+            </ol>
+        </div>
+    );
+
 }
 
 export default SearchUI
