@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-// import * as BooksAPI from './BooksAPI'
+import * as BooksAPI from './BooksAPI'
 import './App.css'
 import {BookUI} from "./BookUI";
 import DebounceInput from 'react-debounce-input';
@@ -13,8 +13,34 @@ class SearchUI extends Component {
 
     updateQuery = (query) => {
         this.setState({query});
-        console.log(this.state.query);
+        this.getBooksFromBookAPI();
     }
+
+    getBooksFromBookAPI = () => {
+        BooksAPI.search(this.state.query).then( 
+            books => {
+                this.setState({books});
+                this.setDefaultShelf();
+            }
+        ).catch(e => console.log(e));
+    }
+
+    setDefaultShelf = () => {
+        let books = this.state.books.map(
+            book => this.isBookAmongOurShelves(book) ? book : this.setBookShelfToNone(book) 
+        );
+        this.setState({books});
+    }
+
+    isBookAmongOurShelves = (book) => {
+        Object.keys(this.props.shelves).some( shelf => book.shelf===shelf )
+    }
+
+    setBookShelfToNone = (book) => {
+        book.shelf = 'none';
+        return book;
+    }
+
 
     render() {
         return (
