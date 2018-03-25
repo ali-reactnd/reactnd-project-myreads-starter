@@ -73,7 +73,11 @@ class BooksApp extends React.Component {
         return (
             <div className="app">
             {this.state.showSearchPage ? (
-                <SearchUI shelves={this.state.shelves} flipSearchBoolean={this.flipShowSearchPageBoolean} />
+                <SearchUI 
+                    shelves={this.state.shelves} 
+                    bookShelfChanger={this.bookShelfChanger}
+                    flipSearchBoolean={this.flipShowSearchPageBoolean} 
+                />
             ) : (
                 <MainUI 
                     shelves={this.state.shelves} 

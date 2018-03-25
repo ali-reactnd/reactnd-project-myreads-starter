@@ -46,7 +46,7 @@ class SearchUI extends Component {
         return (
             <div className="search-books">
                 {this.searchBar()}
-                {!!this.state.books && this.searchResultBookShelf()}
+                {!!this.state.books && this.searchResultBookShelf(this.props.bookShelfChanger)}
             </div>
         );
     }
@@ -61,10 +61,11 @@ class SearchUI extends Component {
         </div>
     )
 
-    searchResultBookShelf = () => (
+    searchResultBookShelf = (bookShelfChanger) => (
         <div className="search-books-results">
             <ol className="books-grid">
-                { this.state.books.map( book => <li key={book.id}> <BookUI book={book} /> </li> ) }
+                { this.state.books.map( book => 
+                    <li key={book.id}> <BookUI book={book} bookShelfChanger={bookShelfChanger} /> </li> ) }
             </ol>
         </div>
     );
