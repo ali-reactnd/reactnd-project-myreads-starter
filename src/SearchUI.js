@@ -1,7 +1,8 @@
 import React, {Component} from 'react'
 import * as BooksAPI from './BooksAPI'
 import './App.css'
-import {BookUI} from "./BookUI";
+import { BookUI } from "./BookUI";
+import { Link } from 'react-router-dom'
 import DebounceInput from 'react-debounce-input';
 
 class SearchUI extends Component {
@@ -31,6 +32,10 @@ class SearchUI extends Component {
             return this.props.isValid(b) ? b : book;
         });
     }
+    
+    clearQuery = () => {
+        this.setState({ query: "" })
+    }
 
     render() {
         return (
@@ -43,7 +48,7 @@ class SearchUI extends Component {
 
     searchBar = () => (
         <div className="search-books-bar">
-            <a className="close-search" onClick={() => this.props.flipSearchBoolean()}>Close</a>
+            <Link to='/' className='close-search' onClick={() => this.clearQuery()}>Close</Link>
             <div className="search-books-input-wrapper">
                 <DebounceInput minLength={1} debounceTimeout={800}
                     onChange={event => this.updateQuery(event.target.value)} />

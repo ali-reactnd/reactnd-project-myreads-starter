@@ -2,18 +2,12 @@ import React from 'react'
 import * as BooksAPI from './BooksAPI'
 import './App.css'
 import SearchUI from "./SearchUI";
-import {MainUI} from "./MainUI";
+import { MainUI } from "./MainUI";
+import { Route } from 'react-router-dom'
 
 
 class BooksApp extends React.Component {
     state = {
-        /**
-         * TODO: Instead of using this state variable to keep track of which page
-         * we're on, use the URL in the browser's address bar. This will ensure that
-         * users can use the browser's back and forward buttons to navigate between
-         * pages, as well as provide a good URL they can bookmark and share.
-         */
-        showSearchPage: false,
         books: [],
         shelves: {
             "currentlyReading": "Currently Reading",
@@ -30,12 +24,7 @@ class BooksApp extends React.Component {
         )
     }
 
-    flipShowSearchPageBoolean = () => { this.state.showSearchPage ? 
-        this.setState({showSearchPage: false}) :  this.setState({showSearchPage: true}); 
-    }
-
     bookShelfChanger = (bookId, shelf) => {
-
         let book = this.getBookInState(bookId);
 
         if ( this.isValid(book) )  {
@@ -72,22 +61,24 @@ class BooksApp extends React.Component {
     render() {
         return (
             <div className="app">
-            {this.state.showSearchPage ? (
-                <SearchUI 
-                    shelves={this.state.shelves} 
-                    bookShelfChanger={this.bookShelfChanger}
-                    flipSearchBoolean={this.flipShowSearchPageBoolean} 
-                    getBookInState={this.getBookInState}
-                    isValid={this.isValid}
-                />
-            ) : (
-                <MainUI 
-                    shelves={this.state.shelves} 
-                    books={this.state.books} 
-                    bookShelfChanger={this.bookShelfChanger}
-                    flipSearchBoolean={this.flipShowSearchPageBoolean} 
-                />
-            )}
+                <Route exact path='/' render={() => (
+                    <MainUI 
+                        shelves={this.state.shelves} 
+                        books={this.state.books} 
+                        bookShelfChanger={this.bookShelfChanger}
+                        flipSearchBoolean={this.flipShowSearchPageBoolean} 
+                    />
+                )} />
+
+                <Route path='/search' render={ ({ history }) => (
+                    <SearchUI 
+                        shelves={this.state.shelves} 
+                        bookShelfChanger={this.bookShelfChanger}
+                        flipSearchBoolean={this.flipShowSearchPageBoolean} 
+                        getBookInState={this.getBookInState}
+                        isValid={this.isValid}
+                    />
+                )}/>
             </div>
         )
     }

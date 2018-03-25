@@ -1,7 +1,8 @@
 import React from 'react'
 // import * as BooksAPI from './BooksAPI'
 import './App.css'
-import {Shelf} from "./Shelf";
+import { Shelf } from "./Shelf";
+import { Link } from 'react-router-dom'
 
 export const MainUI = (props) => {
     return (
@@ -22,8 +23,8 @@ export const MainUI = (props) => {
                             />
                 )} </div>
             </div>
-            <div className="open-search">
-                <a onClick={() => props.flipSearchBoolean()}>Add a book</a>
+            <div className='open-search'> 
+                <Link to='/search' className='open-search'>Add a book</Link>
             </div>
         </div>
     );
