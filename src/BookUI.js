@@ -2,18 +2,23 @@ import React from 'react'
 // import * as BooksAPI from './BooksAPI'
 import './App.css'
 
-const BookShelfChangerUI = (bookId, shelf, bookShelfChanger) => (
-    <select id="BookShelfSelector" value={shelf} onChange={event => bookShelfChanger(bookId, event.target.value)}>
+const validateShelf = (shelf, shelves) => {
+    return Object.keys(shelves).some( s => s===shelf ) ? shelf : "none"
+}
+
+
+const BookShelfChangerUI = (bookId, shelf, shelves, bookShelfChanger) => (
+    <select id="BookShelfSelector" value={validateShelf(shelf, shelves)} 
+            onChange={event => bookShelfChanger(bookId, event.target.value)}>
         <option value="none" disabled>Move to...</option>
-        <option value="currentlyReading">Currently Reading</option>
-        <option value="wantToRead">Want to Read</option>
-        <option value="read">Read</option>
+        {Object.keys(shelves).map(
+            (shelfKey, index) => <option key={index} value={shelfKey}>{shelves[shelfKey]}</option>)}
         <option value="none">None</option>
     </select>
 )
 
 
-const display = (book, bookShelfChanger) => (
+const display = (book, shelves, bookShelfChanger) => (
     <div className="book">
         <div className="book-top">
             <div className="book-cover" style={{
@@ -22,7 +27,7 @@ const display = (book, bookShelfChanger) => (
                 backgroundImage: `url(${book.imageLinks.thumbnail})`
             }}></div>
             <div className="book-shelf-changer">
-                {BookShelfChangerUI(book.id, book.shelf, bookShelfChanger)}
+                {BookShelfChangerUI(book.id, book.shelf, shelves, bookShelfChanger)}
             </div>
         </div>
         <div className="book-title">{book.title}</div>
@@ -34,7 +39,7 @@ const display = (book, bookShelfChanger) => (
 export const BookUI = (props) => {
 
     return (
-        props.book ? display(props.book, props.bookShelfChanger) : null 
+        props.book ? display(props.book, props.shelves, props.bookShelfChanger) : null 
     )
 
 }

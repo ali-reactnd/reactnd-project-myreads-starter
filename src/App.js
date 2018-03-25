@@ -77,6 +77,8 @@ class BooksApp extends React.Component {
                     shelves={this.state.shelves} 
                     bookShelfChanger={this.bookShelfChanger}
                     flipSearchBoolean={this.flipShowSearchPageBoolean} 
+                    getBookInState={this.getBookInState}
+                    isValid={this.isValid}
                 />
             ) : (
                 <MainUI 

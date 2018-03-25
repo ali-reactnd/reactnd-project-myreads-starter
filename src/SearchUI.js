@@ -19,28 +19,18 @@ class SearchUI extends Component {
     getBooksFromBookAPI = () => {
         BooksAPI.search(this.state.query).then( 
             books => {
-                this.setState({books});
-                this.setDefaultShelf();
+                this.setState({books: this.checkAgainsUserLibrary(books)});
+                // this.setDefaultShelf();
             }
         ).catch(e => console.log(e));
     }
 
-    setDefaultShelf = () => {
-        let books = this.state.books.map(
-            book => this.isBookAmongOurShelves(book) ? book : this.setBookShelfToNone(book) 
-        );
-        this.setState({books});
+    checkAgainsUserLibrary = (books) => {
+        return books.map( book => {
+            let b = this.props.getBookInState(book.id);
+            return this.props.isValid(b) ? b : book;
+        });
     }
-
-    isBookAmongOurShelves = (book) => {
-        Object.keys(this.props.shelves).some( shelf => book.shelf===shelf )
-    }
-
-    setBookShelfToNone = (book) => {
-        book.shelf = 'none';
-        return book;
-    }
-
 
     render() {
         return (
@@ -65,7 +55,9 @@ class SearchUI extends Component {
         <div className="search-books-results">
             <ol className="books-grid">
                 { this.state.books.map( book => 
-                    <li key={book.id}> <BookUI book={book} bookShelfChanger={bookShelfChanger} /> </li> ) }
+                    <li key={book.id}> 
+                        <BookUI book={book} shelves={this.props.shelves} bookShelfChanger={bookShelfChanger} /> 
+                    </li> ) }
             </ol>
         </div>
     );

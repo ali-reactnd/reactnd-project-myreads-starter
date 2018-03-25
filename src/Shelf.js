@@ -8,13 +8,11 @@ export const Shelf = (props) => (
     <h2 className="bookshelf-title">{props.shelfTitle}</h2>
     <div className="bookshelf-books">
         <ol className="books-grid">
-            {
-                props.books.filter(
-                    book => book.shelf===props.shelfKey 
-                ).map(
-                    book => <li key={book.id}> <BookUI book={book} bookShelfChanger={props.bookShelfChanger} /> </li>
-                )
-            }
+            {props.books.filter( book => book.shelf===props.shelfKey ).map( book => 
+                <li key={book.id}> 
+                    <BookUI book={book} shelves={props.shelves} bookShelfChanger={props.bookShelfChanger} /> 
+                </li>
+            )}
         </ol>
     </div>
 </div>

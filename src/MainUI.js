@@ -15,7 +15,8 @@ export const MainUI = (props) => {
                             <Shelf 
                                 key={index} 
                                 shelfKey={shelfKey} 
-                                shelfTitle={props.shelves[shelfKey]} 
+                                shelfTitle={props.shelves[shelfKey]}
+                                shelves={props.shelves} 
                                 books={props.books}
                                 bookShelfChanger={props.bookShelfChanger} 
                             />
