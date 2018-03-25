@@ -10,13 +10,16 @@ export const MainUI = (props) => {
                 <h1>MyReads</h1>
             </div>
             <div className="list-books-content">
-                <div>
-                    {
-                        Object.keys(props.shelves).map(
-                            (shelfKey, index) => <Shelf key={index} shelfKey={shelfKey} shelfTitle={props.shelves[shelfKey]} books={props.books} />
-                        )
-                    }
-                </div>
+                <div> {Object.keys(props.shelves).map(
+                            (shelfKey, index) => 
+                            <Shelf 
+                                key={index} 
+                                shelfKey={shelfKey} 
+                                shelfTitle={props.shelves[shelfKey]} 
+                                books={props.books}
+                                bookShelfChanger={props.bookShelfChanger} 
+                            />
+                )} </div>
             </div>
             <div className="open-search">
                 <a onClick={() => props.flipSearchBoolean()}>Add a book</a>

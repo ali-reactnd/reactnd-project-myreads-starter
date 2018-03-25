@@ -46,7 +46,7 @@ class SearchUI extends Component {
         return (
             <div className="search-books">
                 {this.searchBar()}
-                {this.searchResultBookShelf()}
+                {!!this.state.books && this.searchResultBookShelf()}
             </div>
         );
     }

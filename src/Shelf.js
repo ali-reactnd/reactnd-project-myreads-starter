@@ -12,7 +12,7 @@ export const Shelf = (props) => (
                 props.books.filter(
                     book => book.shelf===props.shelfKey 
                 ).map(
-                    book => <li key={book.id}> <BookUI book={book} /> </li>
+                    book => <li key={book.id}> <BookUI book={book} bookShelfChanger={props.bookShelfChanger} /> </li>
                 )
             }
         </ol>
