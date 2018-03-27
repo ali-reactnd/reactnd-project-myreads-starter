@@ -30,17 +30,19 @@ class BooksApp extends React.Component {
         let book = this.findBookOnShelf(bookId);
 
         if ( this.isValid(book) )  {
-            BooksAPI.update(book, shelf);
-            book.shelf = shelf;
-            this.updateBookOnShelf(book);
+            this.updateBookOnShelf(book, shelf);
         } else {
-            BooksAPI.get(bookId).then( book => {
-                book.shelf = shelf;
-                this.putNewBookOnShelf(book);
-                BooksAPI.update(book, shelf);
-                this.updateBookAmongSearchResult(book);
-            }).catch( e => {console.log(e)} );
+            this.bringBookFromSearchToShelf(bookId, shelf);
         }
+    }
+
+    bringBookFromSearchToShelf = (bookId, shelf) => {
+        BooksAPI.get(bookId).then( book => {
+            book.shelf = shelf;
+            this.updateBookAmongSearchResult(book);
+            this.putNewBookOnShelf(book);
+            BooksAPI.update(book, shelf);
+        }).catch( e => {console.log(e)} );
     }
 
     updateShelfInfoForBooksMatchQuery = (bookId, shelf) => {
@@ -64,7 +66,9 @@ class BooksApp extends React.Component {
         this.setState( state => ({ booksOnShelves: state.booksOnShelves.concat([ book ]) }))
     }
 
-    updateBookOnShelf = (book) => {
+    updateBookOnShelf = (book, shelf) => {
+        BooksAPI.update(book, shelf);
+        book.shelf = shelf;
         this.setState( state => ({
             booksOnShelves: state.booksOnShelves.map( el => el.id === book.id ? book : el ) } ))
     }
