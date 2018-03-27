@@ -13,7 +13,9 @@ class BooksApp extends React.Component {
             "currentlyReading": "Currently Reading",
             "wantToRead": "Want To Read",
             "read": "Read"
-        }
+        },
+        booksMatchQuery: [],
+        query: ""
     }
 
     componentDidMount() {
@@ -25,37 +27,62 @@ class BooksApp extends React.Component {
     }
 
     bookShelfChanger = (bookId, shelf) => {
-        let book = this.getBookInState(bookId);
+        let book = this.findBookOnShelf(bookId);
 
         if ( this.isValid(book) )  {
             BooksAPI.update(book, shelf);
             book.shelf = shelf;
-            this.updateExistingBookInState(book);
+            this.updateBookOnShelf(book);
         } else {
             BooksAPI.get(bookId).then( book => {
                 book.shelf = shelf;
-                this.addNewBookToState(book);
+                this.putNewBookOnShelf(book);
                 BooksAPI.update(book, shelf);
             }).catch( e => {console.log(e)} );
         }
     }
 
-    getBookInState = (bookId) => {
+    findBookOnShelf = (bookId) => {
         return this.state.booksOnShelves.find( el => el.id === bookId );
     }
 
-    addNewBookToState = (book) => {
+    putNewBookOnShelf = (book) => {
         book = this.isValid(book) ? book : [];
         this.setState( state => ({ booksOnShelves: state.booksOnShelves.concat([ book ]) }))
     }
 
-    updateExistingBookInState = (book) => {
+    updateBookOnShelf = (book) => {
         this.setState( state => {
             state.booksOnShelves.map( el => el.id === book.id ? book : el ) } )
     }
 
     isValid = (object) => {
         return (!!object);
+    }
+
+    
+    updateQuery = (query) => {
+        this.setState({query});
+        this.findBooksUsingBookAPI();
+    }
+
+    findBooksUsingBookAPI = () => {
+        BooksAPI.search(this.state.query).then( 
+            books => {
+                this.setState({booksMatchQuery: this.checkAgainstBooksOnShelf(books)});
+            }
+        ).catch(e => console.log(e));
+    }
+
+    checkAgainstBooksOnShelf = (books) => {
+        return books.map( book => {
+            let b = this.findBookOnShelf(book.id);
+            return this.isValid(b) ? b : book;
+        });
+    }
+    
+    clearQuery = () => {
+        this.setState({ query: "" })
     }
 
     render() {
@@ -66,16 +93,17 @@ class BooksApp extends React.Component {
                         shelves={this.state.shelves} 
                         books={this.state.booksOnShelves} 
                         bookShelfChanger={this.bookShelfChanger}
-                        flipSearchBoolean={this.flipShowSearchPageBoolean} 
                     />
                 )} />
 
                 <Route path='/search' render={ ({ history }) => (
                     <SearchUI 
+                        query={this.state.query}
+                        books={this.state.booksMatchQuery}
+                        updateQuery={this.updateQuery}
+                        clearQuery={this.clearQuery}
                         shelves={this.state.shelves} 
                         bookShelfChanger={this.bookShelfChanger}
-                        flipSearchBoolean={this.flipShowSearchPageBoolean} 
-                        getBookInState={this.getBookInState}
                         isValid={this.isValid}
                     />
                 )}/>
