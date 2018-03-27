@@ -8,7 +8,7 @@ import { Route } from 'react-router-dom'
 
 class BooksApp extends React.Component {
     state = {
-        books: [],
+        booksOnShelves: [],
         shelves: {
             "currentlyReading": "Currently Reading",
             "wantToRead": "Want To Read",
@@ -18,7 +18,7 @@ class BooksApp extends React.Component {
 
     componentDidMount() {
         BooksAPI.getAll().then(
-            books => this.setState({books})
+            books => this.setState({booksOnShelves: books})
         ).catch (
             e => console.log(e)
         )
@@ -41,17 +41,17 @@ class BooksApp extends React.Component {
     }
 
     getBookInState = (bookId) => {
-        return this.state.books.find( el => el.id === bookId );
+        return this.state.booksOnShelves.find( el => el.id === bookId );
     }
 
     addNewBookToState = (book) => {
         book = this.isValid(book) ? book : [];
-        this.setState( state => ({ books: state.books.concat([ book ]) }))
+        this.setState( state => ({ booksOnShelves: state.booksOnShelves.concat([ book ]) }))
     }
 
     updateExistingBookInState = (book) => {
         this.setState( state => {
-            state.books.map( el => el.id === book.id ? book : el ) } )
+            state.booksOnShelves.map( el => el.id === book.id ? book : el ) } )
     }
 
     isValid = (object) => {
@@ -64,7 +64,7 @@ class BooksApp extends React.Component {
                 <Route exact path='/' render={() => (
                     <MainUI 
                         shelves={this.state.shelves} 
-                        books={this.state.books} 
+                        books={this.state.booksOnShelves} 
                         bookShelfChanger={this.bookShelfChanger}
                         flipSearchBoolean={this.flipShowSearchPageBoolean} 
                     />

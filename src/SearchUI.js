@@ -8,7 +8,7 @@ import DebounceInput from 'react-debounce-input';
 class SearchUI extends Component {
 
     state ={
-        books: [],
+        booksMatchQuery: [],
         query: ""
     }
 
@@ -20,7 +20,7 @@ class SearchUI extends Component {
     getBooksFromBookAPI = () => {
         BooksAPI.search(this.state.query).then( 
             books => {
-                this.setState({books: this.checkAgainsUserLibrary(books)});
+                this.setState({booksMatchQuery: this.checkAgainsUserLibrary(books)});
                 // this.setDefaultShelf();
             }
         ).catch(e => console.log(e));
@@ -41,7 +41,7 @@ class SearchUI extends Component {
         return (
             <div className="search-books">
                 {this.searchBar()}
-                {!!this.state.books && this.searchResultBookShelf(this.props.bookShelfChanger)}
+                {!!this.state.booksMatchQuery && this.searchResultBookShelf(this.props.bookShelfChanger)}
             </div>
         );
     }
@@ -59,7 +59,7 @@ class SearchUI extends Component {
     searchResultBookShelf = (bookShelfChanger) => (
         <div className="search-books-results">
             <ol className="books-grid">
-                { this.state.books.map( book => 
+                { this.state.booksMatchQuery.map( book => 
                     <li key={book.id}> 
                         <BookUI book={book} shelves={this.props.shelves} bookShelfChanger={bookShelfChanger} /> 
                     </li> ) }
