@@ -38,12 +38,25 @@ class BooksApp extends React.Component {
                 book.shelf = shelf;
                 this.putNewBookOnShelf(book);
                 BooksAPI.update(book, shelf);
+                this.updateBookAmongSearchResult(book);
             }).catch( e => {console.log(e)} );
+        }
+    }
+
+    updateShelfInfoForBooksMatchQuery = (bookId, shelf) => {
+        let book = this.findBookAmongSearchResult(bookId);
+        if ( this.isValid(book) )  {
+            book.shelf = shelf;
+            this.updateBookAmongearchResult(book);
         }
     }
 
     findBookOnShelf = (bookId) => {
         return this.state.booksOnShelves.find( el => el.id === bookId );
+    }
+
+    findBookAmongSearchResult = (bookId) => {
+        return this.state.booksMatchQuery.find( el => el.id === bookId );
     }
 
     putNewBookOnShelf = (book) => {
@@ -52,8 +65,13 @@ class BooksApp extends React.Component {
     }
 
     updateBookOnShelf = (book) => {
-        this.setState( state => {
-            state.booksOnShelves.map( el => el.id === book.id ? book : el ) } )
+        this.setState( state => ({
+            booksOnShelves: state.booksOnShelves.map( el => el.id === book.id ? book : el ) } ))
+    }
+
+    updateBookAmongSearchResult = (book) => {
+        this.setState( state => ({
+            booksMatchQuery: state.booksMatchQuery.map( el => el.id === book.id ? book : el ) } ))
     }
 
     isValid = (object) => {
@@ -82,7 +100,7 @@ class BooksApp extends React.Component {
     }
     
     clearQuery = () => {
-        this.setState({ query: "" })
+        this.setState({ query: "", booksMatchQuery: [] })
     }
 
     render() {
