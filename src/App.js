@@ -46,7 +46,7 @@ class BooksApp extends React.Component {
 
     addNewBookToState = (book) => {
         book = this.isValid(book) ? book : [];
-        this.setState( state => { state.books.concat([ book ]) })
+        this.setState( state => ({ books: state.books.concat([ book ]) }))
     }
 
     updateExistingBookInState = (book) => {

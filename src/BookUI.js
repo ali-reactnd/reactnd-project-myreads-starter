@@ -39,7 +39,7 @@ const display = (book, shelves, bookShelfChanger) => (
 export const BookUI = (props) => {
 
     return (
-        props.book ? display(props.book, props.shelves, props.bookShelfChanger) : null 
+        !!props.book ? display(props.book, props.shelves, props.bookShelfChanger) : null 
     )
 
 }
