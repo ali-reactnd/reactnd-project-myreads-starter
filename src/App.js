@@ -1,8 +1,8 @@
 import React from 'react'
 import * as BooksAPI from './BooksAPI'
 import './App.css'
-import SearchUI from "./SearchUI";
-import { MainUI } from "./MainUI";
+import SearchUI from "./SearchUI"
+import { MainUI } from "./MainUI"
 import { Route } from 'react-router-dom'
 
 
@@ -73,12 +73,16 @@ class BooksApp extends React.Component {
 
     
     updateQuery = (query) => {
-        this.setState({query});
-        this.findBooksUsingBookAPI();
+        if (this.isValid(query)) {
+            this.setState({query});
+            this.findBooksUsingBookAPI(query);
+        } else { 
+            this.clearQuery();
+        }
     }
 
-    findBooksUsingBookAPI = () => {
-        BooksAPI.search(this.state.query).then( 
+    findBooksUsingBookAPI = (query) => {
+        BooksAPI.search(query).then( 
             books => {
                 this.setState({booksMatchQuery: this.checkAgainstBooksOnShelf(books)});
             }
@@ -86,10 +90,11 @@ class BooksApp extends React.Component {
     }
 
     checkAgainstBooksOnShelf = (books) => {
-        return books.map( book => {
-            let b = this.findBookOnShelf(book.id);
-            return this.isValid(b) ? b : book;
-        });
+        return (!this.isValid(books)) ? [] : 
+            books.map( book => {
+                let b = this.findBookOnShelf(book.id);
+                return this.isValid(b) ? b : book;
+            });
     }
     
     clearQuery = () => {

@@ -1,9 +1,9 @@
 import React, {Component} from 'react'
-// import * as BooksAPI from './BooksAPI'
 import './App.css'
-import { BookUI } from "./BookUI";
+import { BookUI } from "./BookUI"
 import { Link } from 'react-router-dom'
-import DebounceInput from 'react-debounce-input';
+import DebounceInput from 'react-debounce-input'
+import PropTypes from 'prop-types'
 
 class SearchUI extends Component {
 
@@ -31,7 +31,8 @@ class SearchUI extends Component {
             <ol className="books-grid">
                 { this.props.books.map( book => 
                     <li key={book.id}> 
-                        <BookUI book={book} shelves={this.props.shelves} bookShelfChanger={bookShelfChanger} /> 
+                        <BookUI book={book} shelves={this.props.shelves} 
+                            bookShelfChanger={bookShelfChanger} isValid={this.props.isValid}/> 
                     </li> ) }
             </ol>
         </div>
@@ -40,3 +41,15 @@ class SearchUI extends Component {
 }
 
 export default SearchUI
+
+SearchUI.propTypes = {
+    query: PropTypes.string.isRequired,
+    books: PropTypes.array.isRequired,
+    updateQuery: PropTypes.func.isRequired,
+    clearQuery: PropTypes.func.isRequired,
+    shelves: PropTypes.object.isRequired, 
+    bookShelfChanger: PropTypes.func.isRequired,
+    isValid: PropTypes.func.isRequired
+}
+
+

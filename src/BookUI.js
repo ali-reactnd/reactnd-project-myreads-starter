@@ -1,11 +1,10 @@
 import React from 'react'
-// import * as BooksAPI from './BooksAPI'
 import './App.css'
+import PropTypes from 'prop-types'
 
 const validateShelf = (shelf, shelves) => {
     return Object.keys(shelves).some( s => s===shelf ) ? shelf : "none"
 }
-
 
 const BookShelfChangerUI = (bookId, shelf, shelves, bookShelfChanger) => (
     <select id="BookShelfSelector" value={validateShelf(shelf, shelves)} 
@@ -17,8 +16,7 @@ const BookShelfChangerUI = (bookId, shelf, shelves, bookShelfChanger) => (
     </select>
 )
 
-
-const display = (book, shelves, bookShelfChanger) => (
+const displayBook = (book, shelves, bookShelfChanger) => (
     <div className="book">
         <div className="book-top">
             <div className="book-cover" style={{
@@ -35,11 +33,16 @@ const display = (book, shelves, bookShelfChanger) => (
     </div>
 )
 
-
 export const BookUI = (props) => {
-
     return (
-        !!props.book ? display(props.book, props.shelves, props.bookShelfChanger) : null 
+        props.isValid(props.book) ? displayBook(props.book, props.shelves, props.bookShelfChanger) : null 
     )
+}
 
+
+BookUI.propTypes = {
+    shelves: PropTypes.object.isRequired, 
+    book: PropTypes.object.isRequired,
+    bookShelfChanger: PropTypes.func.isRequired,
+    isValid: PropTypes.func.isRequired
 }

@@ -1,8 +1,8 @@
 import React from 'react'
-// import * as BooksAPI from './BooksAPI'
 import './App.css'
-import { Shelf } from "./Shelf";
+import { Shelf } from "./Shelf"
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
 export const MainUI = (props) => {
     return (
@@ -16,7 +16,6 @@ export const MainUI = (props) => {
                             <Shelf 
                                 key={index} 
                                 shelfKey={shelfKey} 
-                                shelfTitle={props.shelves[shelfKey]}
                                 shelves={props.shelves} 
                                 books={props.books}
                                 isValid={props.isValid}
@@ -29,4 +28,13 @@ export const MainUI = (props) => {
             </div>
         </div>
     );
+}
+
+
+
+MainUI.propTypes = {
+    shelves: PropTypes.object.isRequired, 
+    books: PropTypes.array.isRequired,
+    bookShelfChanger: PropTypes.func.isRequired,
+    isValid: PropTypes.func.isRequired
 }
