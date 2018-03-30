@@ -27,30 +27,19 @@ class BooksApp extends React.Component {
     }
 
     bookShelfChanger = (bookId, shelf) => {
-        let book = this.findBookOnShelf(bookId);
-
-        if ( this.isValid(book) )  {
-            this.updateBookOnShelf(book, shelf);
-        } else {
-            this.bringBookFromSearchToShelf(bookId, shelf);
+        let bookOnShelf = this.findBookOnShelf(bookId)
+        if (this.isValid(bookOnShelf)){
+            this.updateBookOnShelf(bookOnShelf, shelf);
         }
-    }
 
-    bringBookFromSearchToShelf = (bookId, shelf) => {
-        BooksAPI.get(bookId).then( book => {
-            book.shelf = shelf;
-            this.updateBookAmongSearchResult(book);
-            this.putNewBookOnShelf(book);
-            BooksAPI.update(book, shelf);
-        }).catch( e => {console.log(e)} );
-    }
-
-    updateShelfInfoForBooksMatchQuery = (bookId, shelf) => {
-        let book = this.findBookAmongSearchResult(bookId);
-        if ( this.isValid(book) )  {
-            book.shelf = shelf;
-            this.updateBookAmongearchResult(book);
+        let bookInSearch = this.findBookAmongSearchResult(bookId)
+        if (this.isValid(bookInSearch)){
+            this.updateBookAmongSearchResult(bookInSearch,shelf);
+            if (!this.isValid(bookOnShelf)) this.putNewBookOnShelf(bookInSearch);
         }
+        
+        let book = this.isValid(bookOnShelf) ? bookOnShelf : bookInSearch;
+        BooksAPI.update(book, shelf);
     }
 
     findBookOnShelf = (bookId) => {
@@ -67,13 +56,13 @@ class BooksApp extends React.Component {
     }
 
     updateBookOnShelf = (book, shelf) => {
-        BooksAPI.update(book, shelf);
         book.shelf = shelf;
         this.setState( state => ({
             booksOnShelves: state.booksOnShelves.map( el => el.id === book.id ? book : el ) } ))
     }
 
-    updateBookAmongSearchResult = (book) => {
+    updateBookAmongSearchResult = (book, shelf) => {
+        book.shelf = shelf;
         this.setState( state => ({
             booksMatchQuery: state.booksMatchQuery.map( el => el.id === book.id ? book : el ) } ))
     }
@@ -115,6 +104,7 @@ class BooksApp extends React.Component {
                         shelves={this.state.shelves} 
                         books={this.state.booksOnShelves} 
                         bookShelfChanger={this.bookShelfChanger}
+                        isValid={this.isValid}
                     />
                 )} />
 

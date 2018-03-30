@@ -19,6 +19,7 @@ export const MainUI = (props) => {
                                 shelfTitle={props.shelves[shelfKey]}
                                 shelves={props.shelves} 
                                 books={props.books}
+                                isValid={props.isValid}
                                 bookShelfChanger={props.bookShelfChanger} 
                             />
                 )} </div>
