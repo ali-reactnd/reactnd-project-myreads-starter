@@ -28,26 +28,29 @@ class BooksApp extends React.Component {
 
     bookShelfChanger = (bookId, shelf) => {
 
-        let bookOnShelf = findBook(bookId, this.state.booksOnShelves)
-        if (isValid(bookOnShelf)){
-            this.setState( state => ({
-                booksOnShelves: updateBook(bookOnShelf, shelf, this.state.booksOnShelves)}))
-        }
+        let updatedBooksOnShelves = this.updateBookShelf(bookId, shelf, 'booksOnShelves')
+        let updatedBooksMatchQuery = this.updateBookShelf(bookId, shelf, 'booksMatchQuery')
 
-        let bookInSearch = findBook(bookId, this.state.booksMatchQuery)
-        if (isValid(bookInSearch)){
-            this.setState( state => ({
-                booksMatchQuery: updateBook(bookInSearch, shelf, this.state.booksMatchQuery)}))
-            if (!isValid(bookOnShelf))  {// Book shelf is updated in search, but book is not in our library
-                this.setState( state => ({
-                    booksOnShelves: addBook(bookInSearch, this.state.booksOnShelves)}))
-            }
-        }
-        
-        let book = isValid(bookOnShelf) ? bookOnShelf : bookInSearch;
+        let bookArrayName = updatedBooksOnShelves ? 'booksOnShelves' : 'booksMatchQuery'
+        let book = findBook(bookId, this.state[bookArrayName])
         BooksAPI.update(book, shelf);
+
+        if (updatedBooksMatchQuery && !updatedBooksOnShelves)  {
+            this.setState( state => ({
+                booksOnShelves: addBook(book, this.state.booksOnShelves)}))
+        }
     }
     
+    updateBookShelf = (bookId, shelf, bookArrayName) => {
+        let book = findBook(bookId, this.state[bookArrayName])
+        if (isValid(book)){
+            this.setState( state => ({
+                [bookArrayName]: updateBook(book, shelf, this.state[bookArrayName])}))
+                return true;
+        }
+        return false;
+    }
+
     updateQuery = (query) => {
         if (isValid(query)) {
             this.setState({query});
