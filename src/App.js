@@ -4,7 +4,7 @@ import './App.css'
 import SearchUI from "./SearchUI"
 import { MainUI } from "./MainUI"
 import { Route } from 'react-router-dom'
-import { findBook, isValid, updateBook, addBook } from './Utility'
+import { findBook, isValid, updateBook, addBook, findAndMatch } from './Utility'
 
 class BooksApp extends React.Component {
     state = {
@@ -42,7 +42,6 @@ class BooksApp extends React.Component {
                 this.setState( state => ({
                     booksOnShelves: addBook(bookInSearch, this.state.booksOnShelves)}))
             }
-
         }
         
         let book = isValid(bookOnShelf) ? bookOnShelf : bookInSearch;
@@ -61,17 +60,9 @@ class BooksApp extends React.Component {
     findBooksUsingBookAPI = (query) => {
         BooksAPI.search(query).then( 
             books => {
-                this.setState({booksMatchQuery: this.checkAgainstBooksOnShelf(books)});
+                this.setState({booksMatchQuery: findAndMatch(books, this.state.booksOnShelves)});
             }
         ).catch(e => console.log(e));
-    }
-
-    checkAgainstBooksOnShelf = (books) => {
-        return (!isValid(books)) ? [] : 
-            books.map( book => {
-                let b = findBook(book.id, this.state.booksOnShelves);
-                return isValid(b) ? b : book;
-            });
     }
     
     clearQuery = () => {

@@ -16,3 +16,13 @@ export const addBook = (book, bookArray) => {
     book = isValid(book) ? book : []
     return bookArray.concat([ book ])
 }
+
+export const findAndMatch = (newBooks, oldBooks) => {
+    if (!isValid(newBooks))
+        return []
+
+    return newBooks.map( newBook => {
+            let oldBook = findBook(newBook.id, oldBooks)
+            return isValid(oldBook) ? oldBook : newBook}
+        )
+}
