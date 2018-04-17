@@ -11,3 +11,8 @@ export const updateBook = (book, shelf, bookArray) => {
     book.shelf = shelf;
     return bookArray.map( el => el.id === book.id ? book : el )
 }
+
+export const addBook = (book, bookArray) => {
+    book = isValid(book) ? book : []
+    return bookArray.concat([ book ])
+}

@@ -4,7 +4,7 @@ import './App.css'
 import SearchUI from "./SearchUI"
 import { MainUI } from "./MainUI"
 import { Route } from 'react-router-dom'
-import { findBook, isValid, updateBook } from './Utility'
+import { findBook, isValid, updateBook, addBook } from './Utility'
 
 class BooksApp extends React.Component {
     state = {
@@ -38,16 +38,15 @@ class BooksApp extends React.Component {
         if (isValid(bookInSearch)){
             this.setState( state => ({
                 booksMatchQuery: updateBook(bookInSearch, shelf, this.state.booksMatchQuery)}))
-            if (!isValid(bookOnShelf)) this.putNewBookOnShelf(bookInSearch);
+            if (!isValid(bookOnShelf))  {// Book shelf is updated in search, but book is not in our library
+                this.setState( state => ({
+                    booksOnShelves: addBook(bookInSearch, this.state.booksOnShelves)}))
+            }
+
         }
         
         let book = isValid(bookOnShelf) ? bookOnShelf : bookInSearch;
         BooksAPI.update(book, shelf);
-    }
-
-    putNewBookOnShelf = (book) => {
-        book = isValid(book) ? book : [];
-        this.setState( state => ({ booksOnShelves: state.booksOnShelves.concat([ book ]) }))
     }
     
     updateQuery = (query) => {
