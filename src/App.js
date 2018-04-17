@@ -4,7 +4,7 @@ import './App.css'
 import SearchUI from "./SearchUI"
 import { MainUI } from "./MainUI"
 import { Route } from 'react-router-dom'
-
+import { findBook } from './Utility'
 
 class BooksApp extends React.Component {
     state = {
@@ -27,12 +27,13 @@ class BooksApp extends React.Component {
     }
 
     bookShelfChanger = (bookId, shelf) => {
-        let bookOnShelf = this.findBookOnShelf(bookId)
+
+        let bookOnShelf = findBook(bookId, this.state.booksOnShelves)
         if (this.isValid(bookOnShelf)){
             this.updateBookOnShelf(bookOnShelf, shelf);
         }
 
-        let bookInSearch = this.findBookAmongSearchResult(bookId)
+        let bookInSearch = findBook(bookId, this.state.booksMatchQuery)
         if (this.isValid(bookInSearch)){
             this.updateBookAmongSearchResult(bookInSearch,shelf);
             if (!this.isValid(bookOnShelf)) this.putNewBookOnShelf(bookInSearch);
@@ -40,14 +41,6 @@ class BooksApp extends React.Component {
         
         let book = this.isValid(bookOnShelf) ? bookOnShelf : bookInSearch;
         BooksAPI.update(book, shelf);
-    }
-
-    findBookOnShelf = (bookId) => {
-        return this.state.booksOnShelves.find( el => el.id === bookId );
-    }
-
-    findBookAmongSearchResult = (bookId) => {
-        return this.state.booksMatchQuery.find( el => el.id === bookId );
     }
 
     putNewBookOnShelf = (book) => {
@@ -92,7 +85,7 @@ class BooksApp extends React.Component {
     checkAgainstBooksOnShelf = (books) => {
         return (!this.isValid(books)) ? [] : 
             books.map( book => {
-                let b = this.findBookOnShelf(book.id);
+                let b = findBook(book.id, this.state.booksOnShelves);
                 return this.isValid(b) ? b : book;
             });
     }
